@@ -101,19 +101,19 @@ class ProductsController extends AppController
      */
     public function edit($id = null)
     {
-        $product = $this->Products->get($id, [
-            'contain' => [],
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $product = $this->Products->patchEntity($product, $this->request->getData());
-            if ($this->Products->save($product)) {
-                $this->Flash->success(__('The product has been saved.'));
+        $product = $this->Products->get($id);
 
-                return $this->redirect(['action' => 'index']);
+        if ($this->request->is(['post', 'put', 'patch'])) {
+            $this->Products->patchEntity($product, $this->request->getData());
+
+            if ($this->Products->save($product)) {
+                $this->Flash->success(__('The product has been updated.'));
+            } else {
+                $this->Flash->error(__('The product could not be updated. Please, try again.'));
             }
-            $this->Flash->error(__('The product could not be saved. Please, try again.'));
         }
-        $this->set(compact('product'));
+
+        return $this->redirect(['action' => 'index']);
     }
 
     /**
