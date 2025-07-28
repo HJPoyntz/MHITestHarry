@@ -32,6 +32,11 @@ class Product extends Entity
         'status' => true,
     ];
 
+    /**
+     * sets the status automatically based on the quantity.
+     *
+     * @return string The calculated stock status.
+     */
     protected function _getStatus(): string
     {
         if ($this->quantity === 0) {

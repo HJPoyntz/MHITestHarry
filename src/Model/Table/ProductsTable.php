@@ -27,6 +27,12 @@ use Cake\Validation\Validator;
  */
 class ProductsTable extends Table
 {
+    /**
+     * Initialize the table configuration
+     *
+     * @param array $config Table configuration options.
+     * @return void
+     */
     public function initialize(array $config): void
     {
         parent::initialize($config);
@@ -36,14 +42,20 @@ class ProductsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp', [
-        'events' => [
-           'Model.beforeSave' => [
-               'last_updated' => 'always',
-           ],
-        ],
+            'events' => [
+                'Model.beforeSave' => [
+                    'last_updated' => 'always',
+                ],
+            ],
         ]);
     }
 
+    /**
+     * Set default validation rules for the Products table
+     *
+     * @param \Cake\Validation\Validator $validator The validator to define rules on.
+     * @return \Cake\Validation\Validator
+     */
     public function validationDefault(Validator $validator): Validator
     {
         $validator
@@ -85,6 +97,12 @@ class ProductsTable extends Table
         return $validator;
     }
 
+    /**
+     * Build application integrity rules
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to define rules on.
+     * @return \Cake\ORM\RulesChecker
+     */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add(new IsUnique(['name']), ['errorField' => 'name', 'message' => 'Name must be unique']);
@@ -92,16 +110,28 @@ class ProductsTable extends Table
         return $rules;
     }
 
+    /**
+     * Seeds the products table with 10 sample products if it's empty
+     *
+     * @return void
+     */
     public function seedIfEmpty(): void
     {
         if ($this->find()->count() === 0) {
             for ($i = 1; $i <= 10; $i++) {
                 $quantity = rand(0, 20);
+                $price = rand(100, 1000) / 10;
+                $statusOptions = ['active', 'inactive', 'discontinued'];
+                $status = $statusOptions[array_rand($statusOptions)];
+
                 $product = $this->newEntity([
                     'name' => 'Product ' . $i,
                     'quantity' => $quantity,
-                    'price' => rand(100, 1000) / 10,
+                    'price' => $price,
+                    'status' => $status,
+                    'deleted' => false,
                 ]);
+
                 $this->save($product);
             }
         }
