@@ -33,8 +33,8 @@ class ProductsControllerTest extends TestCase
             'name' => 'New Product',
             'quantity' => 15,
             'price' => 25.50,
-            'deleted' => 0,  
-            'status' => 'in stock', 
+            'deleted' => 0,
+            'status' => 'in stock',
         ];
 
         $this->post('/products/add', $data);
@@ -47,7 +47,7 @@ class ProductsControllerTest extends TestCase
 
     public function testDelete()
     {
-        $productId = 1; 
+        $productId = 1;
 
         $this->enableCsrfToken();
         $this->enableSecurityToken();

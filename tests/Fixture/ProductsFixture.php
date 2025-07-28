@@ -21,7 +21,7 @@ class ProductsFixture extends TestFixture
                 'quantity' => 20,
                 'price' => 100.00,
                 'deleted' => 0,
-                'status' => 'in stock',   
+                'status' => 'in stock',
                 'created' => '2025-07-28 10:00:00',
                 'modified' => '2025-07-28 10:00:00',
                 'last_updated' => '2025-07-28 10:00:00',

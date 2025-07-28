@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Model\Table;
 
-use Cake\TestSuite\TestCase;
 use Cake\ORM\TableRegistry;
+use Cake\TestSuite\TestCase;
 
 /**
  * App\Model\Table\ProductsTable Test Case

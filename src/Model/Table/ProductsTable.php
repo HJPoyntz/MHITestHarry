@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use Cake\ORM\Rule\IsUnique;
+use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use Cake\ORM\RulesChecker;
-use Cake\ORM\Rule\IsUnique;
 
 /**
  * Products Model
@@ -27,7 +27,7 @@ use Cake\ORM\Rule\IsUnique;
  */
 class ProductsTable extends Table
 {
-     public function initialize(array $config): void
+    public function initialize(array $config): void
     {
         parent::initialize($config);
 
@@ -37,11 +37,11 @@ class ProductsTable extends Table
 
         $this->addBehavior('Timestamp', [
         'events' => [
-            'Model.beforeSave' => [
-                'last_updated' => 'always',
-            ],
+           'Model.beforeSave' => [
+               'last_updated' => 'always',
+           ],
         ],
-    ]);
+        ]);
     }
 
     public function validationDefault(Validator $validator): Validator
@@ -66,6 +66,7 @@ class ProductsTable extends Table
         $validator->add('quantity', 'priceQuantityCheck', [
             'rule' => function ($value, $context) {
                 $price = $context['data']['price'] ?? 0;
+
                 return $price <= 100 || $value >= 10;
             },
             'message' => 'Products with price > 100 must have a quantity of at least 10',
@@ -75,7 +76,8 @@ class ProductsTable extends Table
         $validator->add('price', 'promoPriceCheck', [
             'rule' => function ($value, $context) {
                 $name = strtolower($context['data']['name'] ?? '');
-                return (strpos($name, 'promo') === false || $value < 50);
+
+                return strpos($name, 'promo') === false || $value < 50;
             },
             'message' => 'Products with "promo" in the name must have a price below 50',
         ]);
@@ -88,5 +90,20 @@ class ProductsTable extends Table
         $rules->add(new IsUnique(['name']), ['errorField' => 'name', 'message' => 'Name must be unique']);
 
         return $rules;
+    }
+
+    public function seedIfEmpty(): void
+    {
+        if ($this->find()->count() === 0) {
+            for ($i = 1; $i <= 10; $i++) {
+                $quantity = rand(0, 20);
+                $product = $this->newEntity([
+                    'name' => 'Product ' . $i,
+                    'quantity' => $quantity,
+                    'price' => rand(100, 1000) / 10,
+                ]);
+                $this->save($product);
+            }
+        }
     }
 }

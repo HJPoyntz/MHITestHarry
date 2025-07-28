@@ -18,6 +18,8 @@ class ProductsController extends AppController
      */
     public function index()
     {
+        $this->Products->seedIfEmpty();
+
         $query = $this->Products->find()->where(['deleted' => false]);
 
         if ($this->request->getQuery('search')) {
@@ -34,6 +36,7 @@ class ProductsController extends AppController
 
         $this->set(compact('products', 'newProduct'));
     }
+
     /**
      * View method
      *
@@ -64,6 +67,7 @@ class ProductsController extends AppController
 
             if ($this->Products->save($product)) {
                 $this->Flash->success(__('The product has been saved.'));
+
                 return $this->redirect(['action' => 'index']);
             }
 

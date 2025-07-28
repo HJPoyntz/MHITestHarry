@@ -39,6 +39,7 @@ class Product extends Entity
         } elseif ($this->quantity > 0 && $this->quantity <= 10) {
             return 'low stock';
         }
+
         return 'in stock';
     }
 }
