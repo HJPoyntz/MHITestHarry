@@ -49,14 +49,18 @@ class ProductsControllerTest extends TestCase
     {
         $productId = 1;
 
+        $products = $this->getTableLocator()->get('Products');
+        $productBefore = $products->find()->where(['id' => $productId])->first();
+        $this->assertNotEmpty($productBefore, 'Product must exist before delete.');
+
         $this->enableCsrfToken();
         $this->enableSecurityToken();
 
         $this->post("/products/delete/$productId");
         $this->assertRedirect('/products');
 
-        $products = $this->getTableLocator()->get('Products');
-        $product = $products->find()->where(['id' => $productId])->first();
-        $this->assertEmpty($product);
+        $productAfter = $products->find()->where(['id' => $productId])->first();
+        $this->assertNotEmpty($productAfter, 'Product still exists after delete.');
+        $this->assertTrue($productAfter->deleted, 'Product should be marked as deleted.');
     }
 }
