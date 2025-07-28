@@ -25,6 +25,13 @@
         </div>
     <?= $this->Form->end() ?>
 
+    <!-- Add a new product button -->
+    <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#productModal">
+            ➕ Add Product
+        </button>
+    </div>
+
     <!-- Product Table -->
     <table class="table table-bordered table-hover">
         <thead class="table-light">
@@ -40,11 +47,10 @@
         <tbody>
             <?php foreach ($products as $product): ?>
                 <tr>
-                    <td><?= h($product->name) ?></td>
+                    <td class="fw-bold"><?= h($product->name) ?></td>
                     <td><?= h($product->quantity) ?></td>
                     <td><?= number_format($product->price, 2) ?></td>
                     <td><?= h(ucwords($product->status)) ?></td>
-                    <td><?= h($product->modified->format('Y-m-d H:i')) ?></td>
                     <td class="text-center">
                         <?= $this->Html->link('✏️ Edit', ['action' => 'edit', $product->id], ['class' => 'btn btn-sm btn-outline-secondary']) ?>
                         <button class="btn btn-sm btn-outline-danger" onclick="confirmDelete(<?= $product->id ?>)">🗑 Delete</button>
@@ -74,6 +80,44 @@
         <?= $this->Form->button('Delete', ['class' => 'btn btn-danger']) ?>
       </div>
     </div>
+    <?= $this->Form->end() ?>
+  </div>
+</div>
+
+<!-- Add Product Modal -->
+<div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <?= $this->Form->create($newProduct, ['url' => ['action' => 'add'], 'class' => 'modal-content']) ?>
+      <div class="modal-header">
+        <h5 class="modal-title">Add New Product</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+            <?= $this->Form->control('name', ['class' => 'form-control', 'label' => 'Product Name']) ?>
+        </div>
+        <div class="mb-3">
+            <?= $this->Form->control('quantity', ['class' => 'form-control']) ?>
+        </div>
+        <div class="mb-3">
+            <?= $this->Form->control('price', ['class' => 'form-control']) ?>
+        </div>
+        <div class="mb-3">
+            <?= $this->Form->control('status', [
+                'type' => 'select',
+                'options' => [
+                    'in stock' => 'In Stock',
+                    'low stock' => 'Low Stock',
+                    'out of stock' => 'Out of Stock'
+                ],
+                'class' => 'form-select'
+            ]) ?>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <?= $this->Form->button('Save Product', ['class' => 'btn btn-success']) ?>
+      </div>
     <?= $this->Form->end() ?>
   </div>
 </div>
