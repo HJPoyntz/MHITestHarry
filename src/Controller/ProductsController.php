@@ -28,7 +28,7 @@ class ProductsController extends AppController
             $query->where(['status' => $this->request->getQuery('status')]);
         }
 
-        $products = $this->paginate($query);
+        $products = $this->paginate($query, ['limit' => 10]);
 
         $newProduct = $this->Products->newEmptyEntity();
 

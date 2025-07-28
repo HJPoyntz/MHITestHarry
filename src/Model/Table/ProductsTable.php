@@ -35,7 +35,13 @@ class ProductsTable extends Table
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
+        $this->addBehavior('Timestamp', [
+        'events' => [
+            'Model.beforeSave' => [
+                'last_updated' => 'always',
+            ],
+        ],
+    ]);
     }
 
     public function validationDefault(Validator $validator): Validator

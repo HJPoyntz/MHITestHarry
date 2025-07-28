@@ -52,8 +52,13 @@
                     <td><?= number_format($product->price, 2) ?></td>
                     <td><?= h(ucwords($product->status)) ?></td>
                     <td class="text-center">
-                        <?= $this->Html->link('✏️ Edit', ['action' => 'edit', $product->id], ['class' => 'btn btn-sm btn-outline-secondary']) ?>
-                        <button class="btn btn-sm btn-outline-danger" onclick="confirmDelete(<?= $product->id ?>)">🗑 Delete</button>
+                        <a href="<?= $this->Url->build(['action' => 'edit', $product->id]) ?>" class="btn btn-outline-primary btn-fixed-height">
+                            <span class="btn">✏️ Edit</span>
+                        </a>
+
+                        <button type="button" class="btn btn-outline-danger btn-fixed-height" onclick="confirmDelete(<?= $product->id ?>)">
+                            <span class="btn">🗑 Delete</span>
+                        </button>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -101,17 +106,6 @@
         </div>
         <div class="mb-3">
             <?= $this->Form->control('price', ['class' => 'form-control']) ?>
-        </div>
-        <div class="mb-3">
-            <?= $this->Form->control('status', [
-                'type' => 'select',
-                'options' => [
-                    'in stock' => 'In Stock',
-                    'low stock' => 'Low Stock',
-                    'out of stock' => 'Out of Stock'
-                ],
-                'class' => 'form-select'
-            ]) ?>
         </div>
       </div>
       <div class="modal-footer">

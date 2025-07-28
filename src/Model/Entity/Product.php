@@ -31,4 +31,14 @@ class Product extends Entity
         'price' => true,
         'status' => true,
     ];
+
+    protected function _getStatus(): string
+    {
+        if ($this->quantity === 0) {
+            return 'out of stock';
+        } elseif ($this->quantity > 0 && $this->quantity <= 10) {
+            return 'low stock';
+        }
+        return 'in stock';
+    }
 }

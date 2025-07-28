@@ -222,3 +222,13 @@ th {
         content: " \2190";
     }
 }
+
+.btn-fixed-height {
+  height: 38px; 
+  line-height: 1.5;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
