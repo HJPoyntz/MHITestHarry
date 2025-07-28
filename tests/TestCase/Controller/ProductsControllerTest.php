@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller;
 
-use App\Controller\ProductsController;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
@@ -16,67 +15,48 @@ class ProductsControllerTest extends TestCase
 {
     use IntegrationTestTrait;
 
-    /**
-     * Fixtures
-     *
-     * @var array<string>
-     */
-    protected $fixtures = [
-        'app.Products',
-    ];
+    public $fixtures = ['app.Products'];
 
-    /**
-     * Test index method
-     *
-     * @return void
-     * @uses \App\Controller\ProductsController::index()
-     */
-    public function testIndex(): void
+    public function testIndex()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->get('/products');
+        $this->assertResponseOk();
+        $this->assertResponseContains('Product Inventory');
     }
 
-    /**
-     * Test view method
-     *
-     * @return void
-     * @uses \App\Controller\ProductsController::view()
-     */
-    public function testView(): void
+    public function testAdd()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->enableCsrfToken();
+        $this->enableSecurityToken();
+
+        $data = [
+            'name' => 'New Product',
+            'quantity' => 15,
+            'price' => 25.50,
+            'deleted' => 0,  
+            'status' => 'in stock', 
+        ];
+
+        $this->post('/products/add', $data);
+        $this->assertResponseSuccess();
+
+        $products = $this->getTableLocator()->get('Products');
+        $product = $products->find()->where(['name' => 'New Product'])->first();
+        $this->assertNotEmpty($product);
     }
 
-    /**
-     * Test add method
-     *
-     * @return void
-     * @uses \App\Controller\ProductsController::add()
-     */
-    public function testAdd(): void
+    public function testDelete()
     {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
+        $productId = 1; 
 
-    /**
-     * Test edit method
-     *
-     * @return void
-     * @uses \App\Controller\ProductsController::edit()
-     */
-    public function testEdit(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
+        $this->enableCsrfToken();
+        $this->enableSecurityToken();
 
-    /**
-     * Test delete method
-     *
-     * @return void
-     * @uses \App\Controller\ProductsController::delete()
-     */
-    public function testDelete(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->post("/products/delete/$productId");
+        $this->assertRedirect('/products');
+
+        $products = $this->getTableLocator()->get('Products');
+        $product = $products->find()->where(['id' => $productId])->first();
+        $this->assertEmpty($product);
     }
 }

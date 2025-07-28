@@ -51,6 +51,7 @@
                     <td><?= h($product->quantity) ?></td>
                     <td><?= number_format($product->price, 2) ?></td>
                     <td><?= h(ucwords($product->status)) ?></td>
+                    <td><?= h($product->last_updated ? $product->last_updated->format('Y-m-d H:i') : '-') ?></td> <!-- Added this -->
                     <td class="text-center">
                         <a href="<?= $this->Url->build(['action' => 'edit', $product->id]) ?>" class="btn btn-outline-primary btn-fixed-height">
                             <span class="btn">✏️ Edit</span>

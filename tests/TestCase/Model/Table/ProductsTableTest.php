@@ -3,62 +3,47 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\ProductsTable;
 use Cake\TestSuite\TestCase;
+use Cake\ORM\TableRegistry;
 
 /**
  * App\Model\Table\ProductsTable Test Case
  */
 class ProductsTableTest extends TestCase
 {
-    /**
-     * Test subject
-     *
-     * @var \App\Model\Table\ProductsTable
-     */
-    protected $Products;
+    public $Products;
 
-    /**
-     * Fixtures
-     *
-     * @var array<string>
-     */
-    protected $fixtures = [
-        'app.Products',
-    ];
+    public $fixtures = ['app.Products'];
 
-    /**
-     * setUp method
-     *
-     * @return void
-     */
-    protected function setUp(): void
+    public function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('Products') ? [] : ['className' => ProductsTable::class];
-        $this->Products = $this->getTableLocator()->get('Products', $config);
+        $this->Products = TableRegistry::getTableLocator()->get('Products');
     }
 
-    /**
-     * tearDown method
-     *
-     * @return void
-     */
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         unset($this->Products);
-
         parent::tearDown();
     }
 
-    /**
-     * Test validationDefault method
-     *
-     * @return void
-     * @uses \App\Model\Table\ProductsTable::validationDefault()
-     */
-    public function testValidationDefault(): void
+    public function testValidationSuccess()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $product = $this->Products->newEntity([
+            'name' => 'Test Product',
+            'quantity' => 20,
+            'price' => 50.00,
+        ]);
+        $this->assertEmpty($product->getErrors());
+    }
+
+    public function testValidationFailure()
+    {
+        $product = $this->Products->newEntity([
+            'name' => '',
+            'quantity' => -5,
+            'price' => 0,
+        ]);
+        $this->assertNotEmpty($product->getErrors());
     }
 }
